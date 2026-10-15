@@ -1,4 +1,3 @@
-
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -49,7 +48,13 @@ export default async function ProductDetailPage({
   // Avoid showing category, price, and location a second time.
   const specifications = product.specifications.filter((specification) => {
     const label = specification.label.trim().toLowerCase();
-    return !["category", "listed price", "price", "location"].includes(label);
+
+    return ![
+      "category",
+      "listed price",
+      "price",
+      "location",
+    ].includes(label);
   });
 
   return (
@@ -101,7 +106,9 @@ export default async function ProductDetailPage({
             </div>
 
             <h1>{product.name}</h1>
-            <p className="detail-short-description">{product.description}</p>
+            <p className="detail-short-description">
+              {product.description}
+            </p>
 
             <div className="detail-price-panel">
               <span className="detail-price-label">Price</span>
@@ -112,7 +119,9 @@ export default async function ProductDetailPage({
 
             <div className="detail-quick-facts">
               <div className="detail-quick-fact">
-                <span className="detail-fact-icon" aria-hidden="true">⌖</span>
+                <span className="detail-fact-icon" aria-hidden="true">
+                  ⌖
+                </span>
                 <div>
                   <span className="detail-label">Location</span>
                   <strong>{product.location}, Ethiopia</strong>
@@ -120,7 +129,9 @@ export default async function ProductDetailPage({
               </div>
 
               <div className="detail-quick-fact">
-                <span className="detail-fact-icon" aria-hidden="true">↗</span>
+                <span className="detail-fact-icon" aria-hidden="true">
+                  ↗
+                </span>
                 <div>
                   <span className="detail-label">Seller</span>
                   <strong>{product.seller}</strong>
@@ -128,7 +139,10 @@ export default async function ProductDetailPage({
               </div>
             </div>
 
-            <ProductActions productName={product.name} />
+            <ProductActions
+              productId={product.id}
+              productName={product.name}
+            />
 
             <div className="detail-seller-card">
               <div className="detail-seller-avatar" aria-hidden="true">
@@ -160,7 +174,10 @@ export default async function ProductDetailPage({
           </div>
 
           <div className="detail-description-card">
-            <div className="detail-description-marker" aria-hidden="true" />
+            <div
+              className="detail-description-marker"
+              aria-hidden="true"
+            />
             <div>
               <h3>{product.name}</h3>
               <p>{product.details}</p>

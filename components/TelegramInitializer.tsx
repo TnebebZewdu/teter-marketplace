@@ -1,13 +1,14 @@
-
 "use client";
 
 import { useEffect } from "react";
+import { getProductById } from "@/lib/products";
 
 type TelegramWebApp = {
   ready: () => void;
   expand: () => void;
   initData: string;
   initDataUnsafe: {
+    start_param?: string;
     user?: {
       id: number;
       first_name: string;
@@ -27,19 +28,52 @@ declare global {
   }
 }
 
+function getTelegramStartParam(): string | null {
+  const webApp = window.Telegram?.WebApp;
+
+  // Telegram's documented start parameter.
+  const telegramParam = webApp?.initDataUnsafe?.start_param;
+  if (telegramParam) return telegramParam;
+
+  // Some launch contexts expose Telegram parameters in the URL.
+  const searchParams = new URLSearchParams(window.location.search);
+  const queryParam = searchParams.get("tgWebAppStartParam");
+  if (queryParam) return queryParam;
+
+  // Also check the URL hash, if parameters are present there.
+  const hash = window.location.hash.replace(/^#/, "");
+  const hashParams = new URLSearchParams(hash);
+  const hashParam = hashParams.get("tgWebAppStartParam");
+  if (hashParam) return hashParam;
+
+  return null;
+}
+
 export default function TelegramInitializer() {
   useEffect(() => {
     const webApp = window.Telegram?.WebApp;
 
-    // The marketplace should also work in an ordinary browser.
-    if (!webApp) return;
+    if (webApp) {
+      webApp.ready();
+      webApp.expand();
+      webApp.setHeaderColor?.("#F3EEE5");
+      webApp.setBackgroundColor?.("#F3EEE5");
+    }
 
-    webApp.ready();
-    webApp.expand();
+    const startParam = getTelegramStartParam();
 
-    // Match the existing Shopmore cream background.
-    webApp.setHeaderColor?.("#F3EEE5");
-    webApp.setBackgroundColor?.("#F3EEE5");
+    if (!startParam?.startsWith("product_")) return;
+
+    const productId = startParam.slice("product_".length);
+
+    if (!/^[a-z0-9-]+$/.test(productId)) return;
+    if (!getProductById(productId)) return;
+
+    const productPath = `/products/${encodeURIComponent(productId)}`;
+
+    if (window.location.pathname !== productPath) {
+      window.location.replace(productPath);
+    }
   }, []);
 
   return null;

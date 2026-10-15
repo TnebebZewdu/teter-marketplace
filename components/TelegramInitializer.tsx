@@ -31,16 +31,13 @@ declare global {
 function getTelegramStartParam(): string | null {
   const webApp = window.Telegram?.WebApp;
 
-  // Telegram's documented start parameter.
   const telegramParam = webApp?.initDataUnsafe?.start_param;
   if (telegramParam) return telegramParam;
 
-  // Some launch contexts expose Telegram parameters in the URL.
   const searchParams = new URLSearchParams(window.location.search);
   const queryParam = searchParams.get("tgWebAppStartParam");
   if (queryParam) return queryParam;
 
-  // Also check the URL hash, if parameters are present there.
   const hash = window.location.hash.replace(/^#/, "");
   const hashParams = new URLSearchParams(hash);
   const hashParam = hashParams.get("tgWebAppStartParam");
@@ -61,6 +58,13 @@ export default function TelegramInitializer() {
     }
 
     const startParam = getTelegramStartParam();
+
+    // Temporary diagnostic: inspect only safe, non-authentication values.
+    console.log("Shopmore Telegram debug:", {
+      telegramAvailable: Boolean(window.Telegram?.WebApp),
+      startParam,
+      path: window.location.pathname,
+    });
 
     if (!startParam?.startsWith("product_")) return;
 

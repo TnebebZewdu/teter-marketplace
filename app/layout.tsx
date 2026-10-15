@@ -1,8 +1,8 @@
-
 import type { Metadata } from "next";
 import Script from "next/script";
 import { Geist, Geist_Mono } from "next/font/google";
 import TelegramInitializer from "@/components/TelegramInitializer";
+import TelegramStatus from "@/components/TelegramStatus";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -49,6 +49,7 @@ export default function RootLayout({
       </head>
       <body className="min-h-full flex flex-col">
         <TelegramInitializer />
+        <TelegramStatus />
         {children}
       </body>
     </html>

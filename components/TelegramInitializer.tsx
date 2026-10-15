@@ -59,13 +59,6 @@ export default function TelegramInitializer() {
 
     const startParam = getTelegramStartParam();
 
-    // Temporary diagnostic: inspect only safe, non-authentication values.
-    console.log("Shopmore Telegram debug:", {
-      telegramAvailable: Boolean(window.Telegram?.WebApp),
-      startParam,
-      path: window.location.pathname,
-    });
-
     if (!startParam?.startsWith("product_")) return;
 
     const productId = startParam.slice("product_".length);

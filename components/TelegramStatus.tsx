@@ -1,35 +1,30 @@
 
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 
-type TelegramUser = {
-  first_name: string;
-  username?: string;
-};
+function subscribe() {
+  return () => {};
+}
+
+function getSnapshot() {
+  return typeof window !== "undefined" && Boolean(window.Telegram?.WebApp);
+}
+
+function getServerSnapshot() {
+  return false;
+}
 
 export default function TelegramStatus() {
-  const [insideTelegram, setInsideTelegram] = useState(false);
-  const [user, setUser] = useState<TelegramUser | null>(null);
-
-  useEffect(() => {
-    const webApp = window.Telegram?.WebApp;
-
-    if (!webApp) return;
-
-    setInsideTelegram(true);
-
-    const telegramUser = webApp.initDataUnsafe?.user;
-
-    if (telegramUser) {
-      setUser({
-        first_name: telegramUser.first_name,
-        username: telegramUser.username,
-      });
-    }
-  }, []);
+  const insideTelegram = useSyncExternalStore(
+    subscribe,
+    getSnapshot,
+    getServerSnapshot
+  );
 
   if (!insideTelegram) return null;
+
+  const user = window.Telegram?.WebApp?.initDataUnsafe?.user;
 
   return (
     <div className="telegram-status" role="status">

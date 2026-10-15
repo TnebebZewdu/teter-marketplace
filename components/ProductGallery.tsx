@@ -18,6 +18,7 @@ export default function ProductGallery({
 }: ProductGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [imageFailed, setImageFailed] = useState(false);
+
   const validImages = images.filter(Boolean);
   const activeImage = validImages[activeIndex];
 
@@ -69,10 +70,12 @@ export default function ProductGallery({
       )}
 
       <div className="detail-image-note">
-        <span className="detail-note-icon" aria-hidden="true">i</span>
+        <span className="detail-note-icon" aria-hidden="true">
+          i
+        </span>
         <p>
-          Product images are illustrative. Confirm the item's condition and
-          details with the seller before purchasing.
+          Product images are illustrative. Confirm the item&apos;s condition
+          and details with the seller before purchasing.
         </p>
       </div>
     </section>

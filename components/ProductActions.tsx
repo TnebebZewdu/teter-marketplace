@@ -2,6 +2,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 
 export default function ProductActions({
   productName,
@@ -20,6 +21,7 @@ export default function ProductActions({
           text: `Take a look at ${productName} on Shopmore.`,
           url,
         });
+
         setMessage("Share menu opened.");
         return;
       }
@@ -31,7 +33,9 @@ export default function ProductActions({
         await navigator.clipboard.writeText(url);
         setMessage("Product link copied.");
       } catch {
-        setMessage("Sharing is unavailable in this browser. Copy the page URL from your address bar.");
+        setMessage(
+          "Sharing is unavailable in this browser. Copy the page URL from your address bar."
+        );
       }
     }
   }
@@ -43,13 +47,12 @@ export default function ProductActions({
         className="detail-contact-button"
         onClick={shareProduct}
       >
-        Share this product
-        <span aria-hidden="true">↗</span>
+        Share this product <span aria-hidden="true">↗</span>
       </button>
 
-      <a className="detail-secondary-button" href="/#deals">
+      <Link className="detail-secondary-button" href="/#deals">
         Continue shopping
-      </a>
+      </Link>
 
       <p className="detail-action-message" role="status" aria-live="polite">
         {message}

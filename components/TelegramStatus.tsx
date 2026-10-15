@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useSyncExternalStore } from "react";
@@ -8,7 +7,7 @@ function subscribe() {
 }
 
 function getSnapshot() {
-  return typeof window !== "undefined" && Boolean(window.Telegram?.WebApp);
+  return Boolean(window.Telegram?.WebApp?.initData);
 }
 
 function getServerSnapshot() {
